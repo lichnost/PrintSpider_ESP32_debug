@@ -137,14 +137,14 @@ void send_image_row_black(int pos) {
 
 void print_loop() {
 	while(true) {
-        vTaskDelay(3/portTICK_PERIOD_MS);
-        // ESP_LOGI(TAG, "Printing...");
+        vTaskDelay(3000/portTICK_PERIOD_MS);
+        ESP_LOGI(TAG, "Printing...");
         if (image_color) {
             send_image_row_color(0);
         } else {
             send_image_row_black(0);
         }
-        // ESP_LOGI(TAG, "Print done");
+        ESP_LOGI(TAG, "Print done");
     }
 }
 
@@ -162,5 +162,6 @@ void app_main(void)
     init_printing();
 
 	//As the printcart interrupt is on core 0, better use core 1 for the image processing stuff that happens in the main loop.
-	xTaskCreatePinnedToCore(print_loop, "print_loop", 1024*16, NULL, 7, NULL, 1);
+	xTaskCreatePinnedToCore(print_loop, "print_loop", 1024*16, NULL, 1, NULL, 1);
+	// print_loop();
 }
